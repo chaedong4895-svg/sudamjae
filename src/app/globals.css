@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #FAFAF8;
+  --color-hanok-text: #1C1C1C;
+  --color-sub: #6B6B6B;
+  --color-accent: #8B6914;
+  --color-border: #E5E0D8;
+  --color-card: #FFFFFF;
+  --color-range: #F0EDE6;
+
+  --font-serif: 'Noto Serif KR', serif;
+  --font-sans: 'Noto Sans KR', sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-hanok-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+  }
+}

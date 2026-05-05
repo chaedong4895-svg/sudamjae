@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>여주 한옥 스테이 — 메인 페이지 프로토타입</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FAFAF8;
+      --text: #1C1C1C;
+      --text-sub: #6B6B6B;
+      --accent: #8B6914;
+      --border: #E5E0D8;
+      --serif: 'Noto Serif KR', serif;
+      --sans: 'Noto Sans KR', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 14px;
+      color: var(--text-sub);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--text);
+      color: white;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-family: var(--sans);
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+    }
+    .nav-cta:hover { background: var(--accent); }
+
+    /* HERO */
+    .hero {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.05) 0%,
+        rgba(0,0,0,0.30) 45%,
+        rgba(0,0,0,0.65) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 10vh;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: 44px;
+      font-weight: 300;
+      color: white;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: 15px;
+      color: rgba(255,255,255,0.70);
+      margin-bottom: 44px;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+    .hero-btn {
+      background: white;
+      color: var(--text);
+      padding: 17px 52px;
+      font-size: 14px;
+      font-family: var(--sans);
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.12em;
+      transition: all 0.2s;
+    }
+    .hero-btn:hover { background: var(--accent); color: white; }
+
+    /* SECTIONS */
+    section { padding: 100px 0; }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 48px; }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 300;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .section-desc {
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.95;
+      font-weight: 300;
+    }
+
+    /* SPACE SECTION */
+    .space-section { background: white; }
+    .space-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .space-img {
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+      display: block;
+    }
+    .space-link {
+      display: inline-block;
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+      text-decoration: none;
+    }
+
+    /* INFO ROW */
+    .info-row {
+      background: var(--text);
+      color: white;
+      padding: 64px 0;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .info-item {
+      text-align: center;
+      padding: 20px 16px;
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+    .info-item:last-child { border-right: none; }
+    .info-num {
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 300;
+      margin-bottom: 10px;
+    }
+    .info-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.12em;
+    }
+
+    /* LOCATION SECTION */
+    .location-section { background: var(--bg); }
+    .location-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .map-wrap {
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      position: relative;
+    }
+    .map-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+    }
+    .location-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+    .location-badge {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 14px;
+    }
+    .badge-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--text);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .map-btns {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .map-btn {
+      padding: 12px 24px;
+      font-size: 13px;
+      border: 1px solid var(--text);
+      background: transparent;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      font-family: var(--sans);
+      transition: all 0.2s;
+    }
+    .map-btn.primary { background: var(--text); color: white; }
+    .map-btn:hover { background: var(--accent); border-color: var(--accent); color: white; }
+
+    /* B2B */
+    .b2b-section { background: #F5F0E8; }
+    .b2b-inner { text-align: center; max-width: 620px; margin: 0 auto; }
+    .b2b-tags {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .b2b-tag {
+      font-size: 11px;
+      padding: 6px 18px;
+      border: 1px solid rgba(0,0,0,0.18);
+      letter-spacing: 0.1em;
+      color: var(--text-sub);
+    }
+    .b2b-btn {
+      display: inline-block;
+      margin-top: 36px;
+      background: var(--text);
+      color: white;
+      padding: 17px 52px;
+      font-size: 14px;
+      font-family: var(--sans);
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.1em;
+    }
+    .b2b-btn:hover { background: var(--accent); }
+
+    /* REVIEWS */
+    .reviews-section { background: white; }
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+    }
+    .review-card {
+      border: 1px solid var(--border);
+      padding: 28px;
+    }
+    .review-stars { color: var(--accent); font-size: 14px; margin-bottom: 12px; }
+    .review-text { font-size: 14px; color: var(--text-sub); line-height: 1.8; margin-bottom: 16px; }
+    .review-author { font-size: 12px; color: var(--text); letter-spacing: 0.05em; }
+
+    /* FOOTER */
+    footer {
+      background: var(--text);
+      color: rgba(255,255,255,0.55);
+      padding: 64px 48px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .footer-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 18px;
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    /* STICKY CTA */
+    .sticky-cta {
+      position: fixed;
+      bottom: 36px;
+      right: 44px;
+      z-index: 90;
+      background: var(--text);
+      color: white;
+      padding: 16px 36px;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      letter-spacing: 0.1em;
+      font-family: var(--sans);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.22);
+      transition: background 0.2s;
+    }
+    .sticky-cta:hover { background: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- Sticky Nav -->
+<nav>
+  <a class="nav-logo" href="#">여주 한옥 스테이</a>
+  <ul class="nav-links">
+    <li><a href="#">공간 소개</a></li>
+    <li><a href="#">이용 안내</a></li>
+    <li><a href="#">오시는 길</a></li>
+    <li><a href="#">후기</a></li>
+    <li><a href="#">기업 예약</a></li>
+  </ul>
+  <button class="nav-cta">예약하기</button>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <img src="hanok_stay_pic_01.png" alt="여주 한옥 스테이 전경">
+  <div class="hero-overlay">
+    <p class="hero-eyebrow">Yeoju Hanok Stay &nbsp;·&nbsp; 경기도 여주</p>
+    <h1 class="hero-title">서울에서 단 1시간,<br>세종대왕의 숲에서 머무는 하루</h1>
+    <p class="hero-sub">영동고속도로 여주 IC에서 10분 · 세종대왕릉 인근 프라이빗 한옥</p>
+    <button class="hero-btn">예약하기 →</button>
+  </div>
+</section>
+
+<!-- Space Section -->
+<section class="space-section">
+  <div class="container">
+    <div class="space-grid">
+      <img class="space-img" src="hanok_stay_pic_02.jpg" alt="한옥 담장과 외관">
+      <div>
+        <p class="section-label">Our Space</p>
+        <h2 class="section-title">자연과 전통이<br>공존하는 공간</h2>
+        <p class="section-desc">
+          고즈넉한 솟을대문을 지나면 펼쳐지는 프라이빗 한옥.<br>
+          조선의 건축미와 현대적 편의시설이 조화를 이루는<br>
+          오직 하나의 팀만을 위한 독채 공간입니다.
+        </p>
+        <a href="#" class="space-link">공간 자세히 보기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Info Row -->
+<div class="info-row">
+  <div class="container">
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-num">1,000,000</div>
+        <div class="info-label">원 / 1박 전체 대여</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">최대 3박</div>
+        <div class="info-label">연속 숙박 가능</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">15:00</div>
+        <div class="info-label">체크인 &nbsp;/&nbsp; 11:00 체크아웃</div>
+      </div>
+      <div class="info-item">
+        <div class="info-num">독채</div>
+        <div class="info-label">프라이빗 전체 대여</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Location Section -->
+<section class="location-section">
+  <div class="container">
+    <div class="location-grid">
+      <div class="map-wrap">
+        <img src="hanok_stay_map_01.png" alt="위치 지도">
+      </div>
+      <div>
+        <p class="section-label">Location</p>
+        <h2 class="section-title">오시는 길</h2>
+        <p class="section-desc">경기도 여주시 왕대리 692-66</p>
+        <div class="location-badges">
+          <div class="location-badge">
+            <div class="badge-icon">🚗</div>
+            <div>서울 강남에서 <strong>약 1시간</strong></div>
+          </div>
+          <div class="location-badge">
+            <div class="badge-icon">🛣</div>
+            <div>영동고속도로 여주IC → <strong>10분</strong></div>
+          </div>
+          <div class="location-badge">
+            <div class="badge-icon">🏛</div>
+            <div>세종대왕릉(영릉) 인근 <strong>5~10분</strong></div>
+          </div>
+        </div>
+        <div class="map-btns">
+          <button class="map-btn primary">네이버 길찾기</button>
+          <button class="map-btn">카카오 길찾기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B2B Section -->
+<section class="b2b-section">
+  <div class="container">
+    <div class="b2b-inner">
+      <p class="section-label">Corporate Retreat</p>
+      <h2 class="section-title">기업 세미나 &amp; 워크숍</h2>
+      <div class="b2b-tags">
+        <span class="b2b-tag">팀 세미나</span>
+        <span class="b2b-tag">워크숍</span>
+        <span class="b2b-tag">리트릿</span>
+        <span class="b2b-tag">5 ~ 15명</span>
+        <span class="b2b-tag">평일 예약</span>
+      </div>
+      <p class="section-desc">
+        자연 속 프라이빗 공간에서 진행하는 팀 빌딩.<br>
+        집중과 휴식을 동시에, 잊지 못할 경험을 설계합니다.
+      </p>
+      <button class="b2b-btn">기업 예약 문의하기 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews Section -->
+<section class="reviews-section">
+  <div class="container">
+    <p class="section-label">Guest Review</p>
+    <h2 class="section-title">다녀가신 분들의 이야기</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"한옥의 고요함이 이런 것이구나 싶었습니다. 아침 햇살이 마당으로 들어오는 순간이 잊혀지지 않아요."</p>
+        <div class="review-author">김 * * &nbsp;·&nbsp; 2025.04</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"세종대왕릉 산책 후 돌아와 마루에 앉아 있으니 시간이 멈춘 것 같았습니다. 팀 워크숍으로 완벽한 선택이었어요."</p>
+        <div class="review-author">이 * * &nbsp;·&nbsp; 2025.03</div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"서울에서 이렇게 가까운 곳에 이런 공간이 있다니. 아이들과 함께한 1박이 평생 기억에 남을 것 같습니다."</p>
+        <div class="review-author">박 * * &nbsp;·&nbsp; 2025.02</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">여주 한옥 스테이</div>
+      <div>
+        경기도 여주시 왕대리 692-66<br>
+        세종대왕릉(영릉) 인근<br>
+        문의: 이메일 · 카카오톡
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="margin-bottom:10px;">공간 소개 &nbsp;·&nbsp; 이용 안내 &nbsp;·&nbsp; 예약 &nbsp;·&nbsp; 후기 &nbsp;·&nbsp; 기업 예약</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.3);">© 2025 여주 한옥 스테이. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Sticky CTA -->
+<button class="sticky-cta">예약하기 →</button>
+
+</body>
+</html>
