@@ -13,6 +13,7 @@ export type NotificationPayload = {
   guests: number
   totalPrice: number
   depositDeadline?: string
+  phone?: string
 }
 
 export async function sendReservationPending(payload: NotificationPayload) {
@@ -25,18 +26,27 @@ export async function sendReservationPending(payload: NotificationPayload) {
       <p>체크인: ${payload.checkIn} / 체크아웃: ${payload.checkOut} (${payload.nights}박)</p>
       <p>인원: ${payload.guests}명 / 금액: ${payload.totalPrice.toLocaleString()}원</p>
       <hr/>
-      <p><strong>입금 기한: ${payload.depositDeadline}</strong></p>
-      <p>계좌 정보: (관리자가 별도 안내 예정)</p>
+      <p><strong>입금 기한: 신청 후 2시간 이내</strong></p>
+      <p>계좌 정보는 담당자가 별도로 안내드립니다.</p>
       <p>입금 확인 후 예약이 최종 확정됩니다.</p>
     `,
   })
-  // 관리자 알림
   if (ADMIN) {
     await resend.emails.send({
       from: FROM,
       to: ADMIN,
       subject: `[관리자] 새 예약 신청 — ${payload.userName}`,
-      html: `<p>${payload.userName} 님이 ${payload.checkIn} 예약을 신청했습니다. 관리자 대시보드를 확인하세요.</p>`,
+      html: `
+        <p><strong>${payload.userName}</strong> 님이 예약을 신청했습니다.</p>
+        <ul>
+          <li>체크인: ${payload.checkIn}</li>
+          <li>체크아웃: ${payload.checkOut} (${payload.nights}박)</li>
+          <li>인원: ${payload.guests}명</li>
+          <li>금액: ${payload.totalPrice.toLocaleString()}원</li>
+          <li>연락처: ${payload.phone ?? '—'}</li>
+          <li>이메일: ${payload.to}</li>
+        </ul>
+      `,
     })
   }
 }
