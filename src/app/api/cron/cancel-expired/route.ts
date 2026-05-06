@@ -3,7 +3,6 @@ import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { sendReservationCancelled } from '@/lib/notifications'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
-import type { Database } from '@/types/database'
 
 // Vercel Cron이 10분마다 호출 — 미입금 예약 자동 취소
 export async function GET(req: NextRequest) {
@@ -12,7 +11,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const supabase = createAdminClient<Database>(
+  const supabase = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
   )
@@ -46,7 +45,7 @@ export async function GET(req: NextRequest) {
       try {
         await sendReservationCancelled({
           to: authUser.user.email,
-          userName: (r.users as { name: string } | null)?.name ?? '고객',
+          userName: (r.users as unknown as { name: string } | null)?.name ?? '고객',
           checkIn: format(new Date(r.check_in_date), 'yyyy.MM.dd (eee)', { locale: ko }),
         })
       } catch {}

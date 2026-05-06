@@ -2,7 +2,10 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { format } from 'date-fns'
 import { ko } from 'date-fns/locale'
-import type { ReservationStatus, ReviewStatus } from '@/types/database'
+import type { ReservationStatus, ReviewStatus, Database } from '@/types/database'
+
+type ReservationRow = Database['public']['Tables']['reservations']['Row']
+type ReviewRow = Database['public']['Tables']['reviews']['Row']
 
 const STATUS_LABEL: Record<ReservationStatus, string> = {
   pending: '신청완료', awaiting_payment: '입금대기', payment_received: '입금완료',
@@ -22,11 +25,13 @@ export default async function MypagePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login?redirect=/mypage')
 
-  const [{ data: profile }, { data: reservations }, { data: reviews }] = await Promise.all([
-    supabase.from('users').select('name, phone').eq('id', user.id).single(),
-    supabase.from('reservations').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
-    supabase.from('reviews').select('*, reservations(check_in_date)').eq('user_id', user.id).order('created_at', { ascending: false }),
-  ])
+  const { data: profileRaw } = await supabase.from('users').select('name, phone').eq('id', user.id).single()
+  const { data: reservationsRaw } = await supabase.from('reservations').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+  const { data: reviewsRaw } = await supabase.from('reviews').select('*').eq('user_id', user.id).order('created_at', { ascending: false })
+
+  const profile = profileRaw as { name: string; phone: string } | null
+  const reservations = reservationsRaw as ReservationRow[] | null
+  const reviews = reviewsRaw as ReviewRow[] | null
 
   // 후기 작성 가능한 확정 예약 (후기 미작성)
   const reviewedIds = new Set((reviews ?? []).map((r) => r.reservation_id))

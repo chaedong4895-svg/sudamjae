@@ -74,7 +74,7 @@ export default async function ReviewsPage() {
       .eq('status', 'approved')
       .order('created_at', { ascending: false })
 
-    if (data && data.length > 0) reviews = data as Review[]
+    if (data && data.length > 0) reviews = data as unknown as Review[]
   } catch {
     // Supabase 미연결 시 샘플 데이터로 폴백
   }
